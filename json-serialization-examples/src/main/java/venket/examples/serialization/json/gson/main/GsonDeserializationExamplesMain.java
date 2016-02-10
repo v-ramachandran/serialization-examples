@@ -73,7 +73,7 @@ public class GsonDeserializationExamplesMain {
    */
   private static void printResultOfDeserializingNestedJson() {
     final String json = "{\"name\":\"Modern Web Apps\","
-        + "\"listing\":{\"department\":\"CS\",\"id\":\"378\"}}";
+        + "\"listing\":{\"department_id\":\"CS\",\"course_id\":\"378\"}}";
     final Gson gson = new Gson();
     final Course modernWebAppsCourse = gson.fromJson(json, Course.class);
 
