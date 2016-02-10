@@ -1,11 +1,12 @@
 package venket.examples.serialization.json.gson.main;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import venket.examples.serialization.json.model.Course;
 
@@ -13,11 +14,22 @@ import venket.examples.serialization.json.model.Course;
  * This class illustrates serialization and deserialization with JSON in several different
  * scenarios and is set up in a unit test like manner. Rather than assertions, each example
  * prints out the result of the serialization or deserialization with Gson for visualization.
- * 
+ *
  * In general, Gson maps the structure of the JSON to the structure of a POJO and maps the values
  * accordingly, accomplishing the deserialization through Java reflection. Therefore, to
  * deserialize with Gson with minimal effort, create POJO with properties and nesting analogous
  * to that of the JSON and the deserialization becomes a one-liner.
+ *
+ * For the examples below, we work with Course and Course.Listing, which have the following
+ * properties:
+ *
+ * Course
+ *  - name(String)
+ *  - listing(Listing)
+ * 
+ * Course.Listing
+ *  - departmentId(String)
+ *  - courseId(String)
  */
 public class GsonDeserializationExamplesMain {
 
@@ -56,7 +68,8 @@ public class GsonDeserializationExamplesMain {
    * {"name":"Modern Web Apps","listing":{"departmentId":"CS","courseId":"378"}} to an equivalent
    * Course object.
    *
-   * Nested JSON requires no additional work from the
+   * Nested JSON requires no additional work from Gson. As long as the structure in the POJOs are
+   * analogous to that of the input JSON, Gson does most of the heavy lifting.
    */
   private static void printResultOfDeserializingNestedJson() {
     final String json = "{\"name\":\"Modern Web Apps\","
@@ -99,8 +112,13 @@ public class GsonDeserializationExamplesMain {
     final String json = "[{\"departmentId\":\"CS\",\"courseId\":\"378\"}, "
         + "{\"departmentId\":\"CS\",\"courseId\":\"380D\"}]";
     final Gson gson = new Gson();
-    final List<Course.Listing> courseListings = 
-        gson.fromJson(json, new TypeToken<List<Course.Listing>>(){}.getType());
+
+    // Since the object to be deserialized is a Type that uses generics and Java doesn't
+    // actually provide a way to specify generics, a TypeToken is necessary here to
+    // specify the deserialization type as List<Course.Listing>. This is generally not
+    // necessary unless the deserialization object Type uses generics.
+    final Type courseListingListType = new TypeToken<List<Course.Listing>>(){}.getType();
+    final List<Course.Listing> courseListings = gson.fromJson(json, courseListingListType);
 
     prettyPrintResult("Deserialize List of Items", json, courseListings);
   }
