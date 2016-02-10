@@ -89,7 +89,7 @@ public class GsonDeserializationExamplesMain {
    * department_id and course_id, respectively. The key is that Gson needs to be built with
    * FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES and it will take care of the deserialization.
    */
-  private static void printResultsOfDeserializingSnakeCase() {
+  private static void printResultOfDeserializingSnakeCase() {
     final String json = "{\"department_id\":\"CS\",\"course_id\":\"378\"}";
     final Gson gson = new GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -134,7 +134,7 @@ public class GsonDeserializationExamplesMain {
     printResultOfDeserializingCourseListing();
     printResultOfDeserializingPartialProperties();
     printResultOfDeserializingNestedJson();
-    printResultsOfDeserializingSnakeCase();
+    printResultOfDeserializingSnakeCase();
     printResultOfDeserializingLists();
   }
 }
